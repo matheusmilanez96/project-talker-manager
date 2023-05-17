@@ -1,4 +1,5 @@
 const express = require('express');
+const talkerManager = require('./talkerManager');
 
 const app = express();
 app.use(express.json());
@@ -13,4 +14,9 @@ app.get('/', (_request, response) => {
 
 app.listen(PORT, () => {
   console.log('Online');
+});
+
+app.get('/talker', async (req, res) => {
+  const pessoas = await talkerManager.getAllPeople();
+  res.status(200).json(pessoas);
 });
