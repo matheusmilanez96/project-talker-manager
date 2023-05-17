@@ -16,6 +16,12 @@ const getAllPeople = async () => {
   return allPeople;
 };
 
+const getPersonById = async (id) => {
+  const allPeople = await readTalkerFile();
+  return allPeople.filter((person) => person.id === id);
+};
+
 module.exports = {
   getAllPeople,
+  getPersonById,
 };
