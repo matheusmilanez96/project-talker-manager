@@ -64,6 +64,18 @@ app.put('/talker/:id',
     return res.status(200).json(newPerson);
 });
 
+app.delete('/talker/:id', auth, async (req, res) => {
+  const { id } = req.params;
+  if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
+    return res.status(401).json({ message: 'Token inválido' })
+  }
+  const pessoaDeletada = await talkerManager.deletePerson(id);
+  if (!pessoaDeletada) {
+    return res.status(401).json({ message: 'Token não encontrado' })
+  }
+  return res.status(204).json();
+});
+
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;

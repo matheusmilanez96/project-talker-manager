@@ -41,7 +41,7 @@ const addPerson = async (req) => {
   return (newPerson);
 };
 
-const editPerson = async (res, req) => {
+const editPerson = async (req) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
   const pessoas = await getAllPeople();
@@ -56,10 +56,25 @@ const editPerson = async (res, req) => {
   return (pessoas[index]);
 };
 
+const deletePerson = async (id) => {
+  const pessoas = await getAllPeople();
+  const index = pessoas.findIndex((element) => element.id === Number(id));
+  if (index === -1) {
+    return false;
+  }
+  console.log(id);
+  const filteredPeople = pessoas.filter((pessoa) => pessoa.id !== Number(id));
+  const updatedPeople = JSON.stringify(filteredPeople, null, 2);
+  const path = './talker.json';
+  await fs.writeFile(join(__dirname, path), updatedPeople);
+  return true;
+};
+
 module.exports = {
   getAllPeople,
   getPersonById,
   generateToken,
   addPerson,
   editPerson,
+  deletePerson,
 };
