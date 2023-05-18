@@ -57,7 +57,7 @@ app.put('/talker/:id',
   validateRateLength,
   validateRateNumber,
   async (req, res) => {
-    const newPerson = await talkerManager.editPerson(res, req);
+    const newPerson = await talkerManager.editPerson(req);
     if (!newPerson) {
       return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
     }
