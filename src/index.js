@@ -67,11 +67,11 @@ app.put('/talker/:id',
 app.delete('/talker/:id', auth, async (req, res) => {
   const { id } = req.params;
   if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
-    return res.status(401).json({ message: 'Token inválido' })
+    return res.status(401).json({ message: 'Token inválido' });
   }
   const pessoaDeletada = await talkerManager.deletePerson(id);
   if (!pessoaDeletada) {
-    return res.status(401).json({ message: 'Token não encontrado' })
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
   return res.status(204).json();
 });
