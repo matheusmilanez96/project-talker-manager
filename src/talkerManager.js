@@ -26,8 +26,24 @@ function generateToken() {
   return crypto.randomBytes(8).toString('hex');
 }
 
+const addPerson = async (req) => {
+  const { name, age, talk } = req.body;
+  const pessoas = await getAllPeople();
+  const newPerson = { 
+    id: pessoas[pessoas.length - 1].id + 1,
+    name,
+    age,
+    talk,
+  };
+  const allPeople = JSON.stringify([...pessoas, newPerson]);
+  const path = './talker.json';
+  await fs.writeFile(join(__dirname, path), allPeople);
+  return (newPerson);
+};
+
 module.exports = {
   getAllPeople,
   getPersonById,
   generateToken,
+  addPerson,
 };

@@ -1,5 +1,12 @@
 const express = require('express');
 const talkerManager = require('./talkerManager');
+const auth = require('./middlewares/auth');
+const validateName = require('./middlewares/validateName');
+const validateAge = require('./middlewares/validateAge');
+const validateTalk = require('./middlewares/validateTalk');
+const validateWatchedAt = require('./middlewares/validateWatchedAt');
+const validateRateLength = require('./middlewares/validateRateLength');
+const validateRateNumber = require('./middlewares/validateRateNumber');
 
 const app = express();
 app.use(express.json());
@@ -47,4 +54,17 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
   return res.status(200).json({ token });
+});
+
+app.post('/talker',
+  auth,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRateLength,
+  validateRateNumber,
+  async (req, res) => {
+    const newPerson = await talkerManager.addPerson(req);
+    return res.status(201).json(newPerson);
 });
