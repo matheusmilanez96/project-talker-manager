@@ -35,10 +35,25 @@ const addPerson = async (req) => {
     age,
     talk,
   };
-  const allPeople = JSON.stringify([...pessoas, newPerson]);
+  const allPeople = JSON.stringify([...pessoas, newPerson], null, 2);
   const path = './talker.json';
   await fs.writeFile(join(__dirname, path), allPeople);
   return (newPerson);
+};
+
+const editPerson = async (res, req) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const pessoas = await getAllPeople();
+  const index = pessoas.findIndex((element) => element.id === Number(id));
+  if (index === -1) {
+    return null;
+  }
+  pessoas[index] = { id: Number(id), name, age, talk };
+  const updatedPeople = JSON.stringify([...pessoas], null, 2);
+  const path = './talker.json';
+  await fs.writeFile(join(__dirname, path), updatedPeople);
+  return (pessoas[index]);
 };
 
 module.exports = {
@@ -46,4 +61,5 @@ module.exports = {
   getPersonById,
   generateToken,
   addPerson,
+  editPerson,
 };

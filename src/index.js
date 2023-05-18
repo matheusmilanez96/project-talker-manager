@@ -28,11 +28,40 @@ app.get('/talker', async (req, res) => {
   res.status(200).json(pessoas);
 });
 
+app.post('/talker',
+  auth,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRateLength,
+  validateRateNumber,
+  async (req, res) => {
+    const newPerson = await talkerManager.addPerson(req);
+    return res.status(201).json(newPerson);
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const person = await talkerManager.getPersonById(Number(id));
   if (!person) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(200).json(person);
+});
+
+app.put('/talker/:id',
+  auth,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRateLength,
+  validateRateNumber,
+  async (req, res) => {
+    const newPerson = await talkerManager.editPerson(res, req);
+    if (!newPerson) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    return res.status(200).json(newPerson);
 });
 
 app.post('/login', (req, res) => {
@@ -54,17 +83,4 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
   return res.status(200).json({ token });
-});
-
-app.post('/talker',
-  auth,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateWatchedAt,
-  validateRateLength,
-  validateRateNumber,
-  async (req, res) => {
-    const newPerson = await talkerManager.addPerson(req);
-    return res.status(201).json(newPerson);
 });
